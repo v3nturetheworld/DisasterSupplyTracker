@@ -1,0 +1,9 @@
+application: team19-govchal00
+version: er
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /
+  script: landing.app
