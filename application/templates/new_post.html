@@ -1,7 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 id="">Write a post</h1>
+<style>
+form{
+margin: 10px;
+float:left;
+position:relative;
+height:450px;
+font-size: 14px;
+font-style: italic;
+line-height: 24px;
+font-weight: bold;
+color: #09C;
+text-decoration: none;
+text-align: right;
+}
+label{
+  margin-right: 20px;
+  text-align: left;
+  float: left;
+}
+#write{
+margin: 10px;
+position:relative;
+font-size: 24px;
+font-weight: bold;
+text-decoration: none;
+text-algin: center;
+}
+</style>
+    <h1 id="write">Write a post</h1>
     <form action="{{ url_for('new_post') }}" method="post" accept-charset="utf-8">
         {{ form.csrf_token }}
         <!-- <p>
