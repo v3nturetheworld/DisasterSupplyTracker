@@ -17,8 +17,8 @@ class PostForm(wtf.Form):
     donor = wtf.StringField('donor', validators=[validators.Required()])
 
 @app.route('/')
-def redirect_to_home():
-    return redirect(url_for('list_posts'))
+def home():
+    return render_template('index.html')
 
 @app.route('/posts')
 def list_posts():
