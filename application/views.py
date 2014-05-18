@@ -56,6 +56,12 @@ def list_examples():
     return render_template('list_examples.html', examples=examples, form=form)
 
 
+
+def maps():
+    """map page functions"""
+    return 'this came from views file'
+
+
 @login_required
 def edit_example(example_id):
     example = ExampleModel.get_by_id(example_id)

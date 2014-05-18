@@ -9,7 +9,6 @@ from flask import render_template
 from application import app
 from application import views
 
-
 ## URL dispatch rules
 # App Engine warm up handler
 # See http://code.google.com/appengine/docs/python/config/appconfig.html#Warming_Requests
@@ -23,6 +22,9 @@ app.add_url_rule('/hello/<username>', 'say_hello', view_func=views.say_hello)
 
 # Examples list page
 app.add_url_rule('/examples', 'list_examples', view_func=views.list_examples, methods=['GET', 'POST'])
+
+# Examples list page
+app.add_url_rule('/map', 'map', view_func=views.list_examples, methods=['GET', 'POST'])
 
 # Examples list page (cached)
 app.add_url_rule('/examples/cached', 'cached_examples', view_func=views.cached_examples, methods=['GET'])
