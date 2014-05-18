@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <ul>
     {% for post in posts %}
     <li>
+ {# note: disabled template because we no longer use thi
        <!--  {{ post.title }} (written by {{ post.author.nickname() }})
 
         {{ post.content }} -->
@@ -13,6 +15,8 @@
         <strong> location: </strong> {{ location.content }}
         <strong> donor: </strong> {{ donor.content }}
         <strong> time: </strong> {{ when.content }} -->
+
+        #}
 
         {{ post.item }}
         {{ post.priority }}

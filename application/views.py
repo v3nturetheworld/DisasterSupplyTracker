@@ -8,6 +8,8 @@ from flaskext.wtf import validators
 
 from google.appengine.api import users
 
+
+
 class PostForm(wtf.Form):
     item = wtf.StringField('item', validators=[validators.Required()])
     priority = wtf.StringField('priority', validators=[validators.Required()])
@@ -29,8 +31,8 @@ def new_post():
     form = PostForm()
     if form.validate_on_submit():
         post = Post(item = form.item.data,
-        			priority = form.priority.data,
-        			location = form.location.data,
+                    priority = form.priority.data,
+                    location = form.location.data,
                     donor = form.donor.data,
                     author = users.get_current_user())
         post.put()
