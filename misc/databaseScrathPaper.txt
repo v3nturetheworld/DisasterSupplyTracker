@@ -1,12 +1,28 @@
-CREATE TABLE locations( 
+//creates the locations and sets the key to the location ID
+CREATE TABLE locations(
 locationID TINYINT unsigned NOT NULL AUTO_INCREMENT,
 address char(70) NOT NULL, name char(50) NOT NULL,
 xCORD char(10) NOT NULL, yCORD char(10) NOT NULL,
 PRIMARY KEY(locationID)
 )ENGINE = InnoDB;
 
+//creates the items and sets the location id to the location ID in locations
 CREATE TABLE items(
 itemID TINYINT unsigned NOT NULL AUTO_INCREMENT,
 guID char(70) NOT NULL, name char(50) NOT NULL,
 locationID TINYINT unsigned NOT NULL, PRIMARY KEY(itemID), INDEX (locationID), FOREIGN KEY(locationID) REFERENCES locations(locationID) on UPDATE CASCADE ON DELETE CASCADE
 )ENGINE = InnoDB;
+
+
+//Standardized Test Data for locations
+//location(ID, address, name, x, y)
+1 / 1062 Delaware St Denver, CO / Denver Galvanize RC / 39.733573 / -104.992776
+2 / 500 Linden St Fort Collins, CO / New Belgium RC / 40.592879 / -105.069002
+3 / 700 Park Ln Estes Park, CO / Estes Park RC / 40.377082 / -105.521690
+
+//Standardized Test Data for supplies
+//items(ID, guID, name, locationID)
+1 / 34237eef-fbee-4c77-89dc-194086758c40 / Water / 1
+2 / 2ea296d6-8f06-4d66-84bd-035949419769 / Water / 3
+3 / 50844331-67ee-4620-90b8-0292398f0090 / Blankets / 2
+4 / b27c25fa-b09b-4f4e-87a4-a39b18ee3eab / Bandages / 1
