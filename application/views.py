@@ -21,7 +21,7 @@ from models import ExampleModel
 
 
 def home():
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 def warmup():
     """App Engine warmup handler

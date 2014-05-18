@@ -7,7 +7,17 @@ import os
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.debug import DebuggedApplication
 
+##Import SQLAlchamey
+from flask.ext.sqlalchemy import SQLAlchemy
 app = Flask('application')
+
+
+##SQLAlchemy info https://www.digitalocean.com/community/articles/how-to-structure-large-flask-applications
+
+#config
+app.config.from_object('config')
+db = SQLAlchemy(app)
+db.create_all()
 
 @app.route('/')
 def index():
