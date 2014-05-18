@@ -1,56 +1,159 @@
 {% extends "base.html" %}
 
 {% block style_block %}
-    <style type="text/css">
-        table.table { width: 60%; }
-    </style>
+<script>
+
+
+</script>
+<style>
+
+     #map-canvas {
+        height: 100%;
+        min-height: 500px;
+        margin: 0px;
+        padding: 0px */
+      }
+</style>
+
+    
+ <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+    function helpcenter(x,y,name,supplies) {
+    this.x = x;
+    this.y = y;
+    this.name = name;
+    this.supplies = supplies;
+    this.glatlang = new google.maps.LatLng(this.x,this.y);
+    }
+
+
+var denverCenter = new helpcenter('39.7400591', '-104.9673914', 'The Denver Flood Center', 'foodstuffs');
+var fortCollins = new helpcenter('40.581825', '-105.077437', 'Fort Collins Flood Center', 'chainsaws');
+
+
+var map;
+var TILE_SIZE = 256;
+var chicago = new google.maps.LatLng(41.850033,-87.6500523);
+
+
+
+function bound(value, opt_min, opt_max) {
+  if (opt_min != null) value = Math.max(value, opt_min);
+  if (opt_max != null) value = Math.min(value, opt_max);
+  return value;
+}
+
+function degreesToRadians(deg) {
+  return deg * (Math.PI / 180);
+}
+
+function radiansToDegrees(rad) {
+  return rad / (Math.PI / 180);
+}
+
+/** @constructor */
+function MercatorProjection() {
+  this.pixelOrigin_ = new google.maps.Point(TILE_SIZE / 2,
+      TILE_SIZE / 2);
+  this.pixelsPerLonDegree_ = TILE_SIZE / 360;
+  this.pixelsPerLonRadian_ = TILE_SIZE / (2 * Math.PI);
+}
+
+MercatorProjection.prototype.fromLatLngToPoint = function(latLng,
+    opt_point) {
+  var me = this;
+  var point = opt_point || new google.maps.Point(0, 0);
+  var origin = me.pixelOrigin_;
+
+  point.x = origin.x + latLng.lng() * me.pixelsPerLonDegree_;
+
+  // Truncating to 0.9999 effectively limits latitude to 89.189. This is
+  // about a third of a tile past the edge of the world tile.
+  var siny = bound(Math.sin(degreesToRadians(latLng.lat())), -0.9999,
+      0.9999);
+  point.y = origin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) *
+      -me.pixelsPerLonRadian_;
+  return point;
+};
+
+MercatorProjection.prototype.fromPointToLatLng = function(point) {
+  var me = this;
+  var origin = me.pixelOrigin_;
+  var lng = (point.x - origin.x) / me.pixelsPerLonDegree_;
+  var latRadians = (point.y - origin.y) / -me.pixelsPerLonRadian_;
+  var lat = radiansToDegrees(2 * Math.atan(Math.exp(latRadians)) -
+      Math.PI / 2);
+  return new google.maps.LatLng(lat, lng);
+};
+
+function createInfoWindowContent(x,y,name,supplies,glatlang) {
+
+  var numTiles = 1 << map.getZoom();
+  var projection = new MercatorProjection();
+  var worldCoordinate = projection.fromLatLngToPoint(chicago);
+  var pixelCoordinate = new google.maps.Point(
+      worldCoordinate.x * numTiles,
+      worldCoordinate.y * numTiles);
+  var tileCoordinate = new google.maps.Point(
+      Math.floor(pixelCoordinate.x / TILE_SIZE),
+      Math.floor(pixelCoordinate.y / TILE_SIZE));
+
+  return [
+    name,
+    'supplies' + supplies,
+
+  ].join('<br>');
+}
+
+function initialize() {
+  var mapOptions = {
+    zoom: 9,
+    center: chicago
+  };
+
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+  mapOptions);
+
+  var coordInfoWindow2 = new google.maps.InfoWindow();
+  coordInfoWindow2.setContent(createInfoWindowContent(denverCenter.x, denverCenter.y, denverCenter.name, denverCenter.supplies, denverCenter.glatlang));
+  coordInfoWindow2.setPosition(denverCenter.glatlang);
+  coordInfoWindow2.open(map);
+
+  var coordInfoWindow3 = new google.maps.InfoWindow();
+  coordInfoWindow3.setContent(createInfoWindowContent(fortCollins.x, fortCollins.y, fortCollins.name, fortCollins.supplies, fortCollins.glatlang));
+  coordInfoWindow3.setPosition(fortCollins.glatlang);
+  coordInfoWindow3.open(map);
+
+
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+    coordInfoWindow.setContent(createInfoWindowContent());
+    coordInfoWindow.open(map);
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
+
+
+
+
+
 {% endblock %}
 
 {% block content %}
 
-    <h1 id="">All Examples</h1>
-    <div>&nbsp;</div>
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Added by</th>
-                <th>Added on</th>
-                <th>&nbsp;</th>
-                <th>&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for example in examples %}
-            {% set example_id = example.key.id() %}
-            <tr>
-                <td>{{ example_id }}</td>
-                <td>{{ example.example_name }}</td>
-                <td>{{ example.example_description }}</td>
-                <td>{{ example.added_by }}</td>
-                <td class="nowrap">{{ example.timestamp.strftime('%b %d, %Y %I:%M %p') }}</td>
-                <td>
-                    <a href="{{ url_for('edit_example', example_id=example_id) }}" class="btn">Edit</a>
-                </td>
-                <td>
-                    <form method="post" action="{{ url_for('delete_example', example_id=example_id) }}">
-                        <button class="btn">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% else %}
-            <tr><td colspan="7">No examples yet</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <p>
-        <a class="btn btn-primary" data-toggle="modal" data-target="#new-example-modal">
-            <i class="icon-plus-sign icon-white"></i>
-            New example
-        </a>
-    </p>
+<div id="map-canvas"></div>
+
+<!-- Responsive iFrame -->
+<!--  
+<div class="Flexible-container">
+    <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.ch/maps?f=q&amp;source=s_q&amp;hl=de&amp;geocode=&amp;q=Bern&amp;aq=&amp;sll=46.813187,8.22421&amp;sspn=3.379772,8.453979&amp;ie=UTF8&amp;hq=&amp;hnear=Bern&amp;t=m&amp;z=12&amp;ll=46.947922,7.444608&amp;output=embed&amp;iwloc=near"></iframe>
+</div>
+
+
+-->
 
 
 
@@ -62,6 +165,7 @@
 
 {% block tail_script %}
     <script>
+    /*
         var FormHelpers = {
             validate: function (form, evt) {
                 // Form validation for modal dialog
@@ -87,5 +191,6 @@
         $(document).ready(function() {
             FormHelpers.init();
         });
+*/
     </script>
 {% endblock tail_script %}
