@@ -1,10 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<ul>
+<style>
+td{
+  background-color: #eeeeee;
+  padding: 10px;
+}
+</style>
+<table>
+  <tr>
+      <td><strong>Items</strong></td>
+      <td><strong>Priority</strong></td>
+      <td><strong>Location</strong></td>
+      <td><strong>Donor</strong></td>
+  </tr>
     {% for post in posts %}
-    <li>
+    <tr>
  {# note: disabled template because we no longer use thi
        <!--  {{ post.title }} (written by {{ post.author.nickname() }})
 
@@ -18,13 +29,11 @@
 
         #}
 
-        {{ post.item }}
-        {{ post.priority }}
-        {{ post.location }}
-        {{ post.donor }}
-        {{ post.time }}
-
-    </li>
+        <td>{{ post.item }}</td>
+        <td>{{ post.priority }}</td>
+        <td>{{ post.location }}</td>
+        <td>{{ post.donor }}</td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
 {% endblock %}
