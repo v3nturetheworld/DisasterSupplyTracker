@@ -1,17 +1,9 @@
-"""
-models.py
+from google.appengine.ext import db
 
-App Engine datastore models
-
-"""
-
-
-from google.appengine.ext import ndb
-
-
-class ExampleModel(ndb.Model):
-    """Example Model"""
-    example_name = ndb.StringProperty(required=True)
-    example_description = ndb.TextProperty(required=True)
-    added_by = ndb.UserProperty()
-    timestamp = ndb.DateTimeProperty(auto_now_add=True)
+class Post(db.Model):
+	item = db.StringProperty(required = True)
+	priority = db.StringProperty(required = True)
+	location = db.StringProperty(required = True)
+	donor = db.StringProperty(required = True)
+	when = db.DateTimeProperty(auto_now_add = True)
+	author = db.UserProperty(required = True)

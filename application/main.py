@@ -1,22 +1,27 @@
-from flask import Flask, render_template
-"""`main` is the top level module for your Flask application."""
+from google.appengine.ext.webapp.util import run_wsgi_app
+from blog import app
+run_wsgi_app(app)
 
-app = Flask(__name__)
 
-#bootstrap = Bootstrap(app)
-# Note: We don't need to call run() since our application is embedded within
-# the App Engine WSGI application server.
+# from flask import Flask, render_template
+# """`main` is the top level module for your Flask application."""
 
-#manager = Manager(app)
-#bootstrap = Bootstrap(app)
+# app = Flask(__name__)
 
-@app.route('/')
-def index():
-	return render_template('index.html')
+# #bootstrap = Bootstrap(app)
+# # Note: We don't need to call run() since our application is embedded within
+# # the App Engine WSGI application server.
 
-@app.route('/user/<name>')
-def user(name):
-	return render_template('user.html', name = name)
+# #manager = Manager(app)
+# #bootstrap = Bootstrap(app)
+
+# @app.route('/')
+# def index():
+# 	return render_template('index.html')
+
+# @app.route('/user/<name>')
+# def user(name):
+# 	return render_template('user.html', name = name)
 	
-if __name__ == '__main__':
-	app.run(debug=True)
+# if __name__ == '__main__':
+# 	app.run(debug=True)
