@@ -1,0 +1,12 @@
+CREATE TABLE locations( 
+locationID TINYINT unsigned NOT NULL AUTO_INCREMENT,
+address char(70) NOT NULL, name char(50) NOT NULL,
+xCORD char(10) NOT NULL, yCORD char(10) NOT NULL,
+PRIMARY KEY(locationID)
+)ENGINE = InnoDB;
+
+CREATE TABLE items(
+itemID TINYINT unsigned NOT NULL AUTO_INCREMENT,
+guID char(70) NOT NULL, name char(50) NOT NULL,
+locationID TINYINT unsigned NOT NULL, PRIMARY KEY(itemID), INDEX (locationID), FOREIGN KEY(locationID) REFERENCES locations(locationID) on UPDATE CASCADE ON DELETE CASCADE
+)ENGINE = InnoDB;
